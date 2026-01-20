@@ -1,0 +1,29 @@
+services:
+  sftpgo:
+    image: drakkan/sftpgo:latest
+    container_name: uysm-sftp-server
+    user: "0:0"
+
+    environment:
+      - SFTPGO_HTTP__BINDINGS__0__ADDRESS=0.0.0.0
+      - SFTPGO_HTTP__BINDINGS__0__PORT=8080
+      - SFTPGO_HTTP__BINDINGS__0__ENABLE_WEB_ADMIN=true
+      - SFTPGO_HTTP__BINDINGS__0__ENABLE_REST_API=true
+
+      - SFTPGO_FTPD__BINDINGS__0__PORT=2122
+      - SFTPGO_FTPD__BINDINGS__0__TLS_MODE=1
+      - SFTPGO_FTPD__BINDINGS__0__CERTIFICATE_FILE=/srv/sftpgo/ftps_cert.pem
+      - SFTPGO_FTPD__BINDINGS__0__CERTIFICATE_KEY_FILE=/srv/sftpgo/ftps_key.pem
+      - SFTPGO_FTPD__PASSIVE_PORT_RANGE__START=50000
+      - SFTPGO_FTPD__PASSIVE_PORT_RANGE__END=50100
+
+    ports:
+      - "9090:8080"
+      - "2022:2022"
+      - "2122:2122"
+      - "50000-50100:50000-50100"
+
+    volumes:
+      - c:/sftp-data:/srv/sftpgo
+
+    restart: always
